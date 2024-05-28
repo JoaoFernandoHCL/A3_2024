@@ -21,4 +21,4 @@ export class CreatePedidoItensDto {
     quantidade: number;
 }
 
-export class UpdadePedidoItensDto extends PartialType(CreatePedidoItensDto){}
+export class UpdatePedidoItensDto extends PartialType(CreatePedidoItensDto){}
