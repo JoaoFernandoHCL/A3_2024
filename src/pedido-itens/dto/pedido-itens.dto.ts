@@ -1,22 +1,22 @@
 import { PartialType } from "@nestjs/mapped-types";
-import { IsDecimal, IsInt } from "class-validator";
+import { IsInt, IsNumber } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 
 export class CreatePedidoItensDto {
-    @IsInt()
+    @IsNumber()
     @ApiProperty({ description: 'Id do pedido' })
     pedido_id: number;
 
-    @IsInt()
+    @IsNumber()
     @ApiProperty({ description: 'Id do produto escolhido' })
     produto_id: number;
 
-    @IsDecimal()
+    @IsNumber()
     @ApiProperty({ description: 'Preco por unidade do produto escolhido' })
     preco_unidade: number;
 
-    @IsDecimal()
+    @IsNumber()
     @ApiProperty({ description: 'Quantia de unidades do produto escolhido' })
     quantidade: number;
 }

@@ -17,12 +17,13 @@ export class ProdutoService {
   }
 
   async findAll(): Promise<Produto[]> {
-    return this.produtoRepository.find();
+    return await this.produtoRepository.find({relations: ['pedidoItens']});
   }
 
   async findOne(id: number): Promise<Produto> {
     const produto = await this.produtoRepository.findOne({
         where: { id_produto: id },
+        relations: ["pedidoItens"],
       });
       if (!produto) {
         throw new HttpException(`Produto não encontrado.`, HttpStatus.NOT_FOUND)

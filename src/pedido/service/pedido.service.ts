@@ -34,7 +34,7 @@ export class PedidoService {
   async findOne(id: number): Promise<Pedido> {
     const pedido = await this.pedidoRepository.findOne({
       where: { id_pedido: id },
-      relations: ["user"],
+      relations: ["user", "pedidoItens"],
     });
     if (!pedido) {
         throw new HttpException(`Pedido não encontrado.`, HttpStatus.NOT_FOUND)

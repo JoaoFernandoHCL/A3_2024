@@ -21,11 +21,9 @@ export class PedidoItensController {
   @Post()
   @ApiOperation({ summary: 'Criar um novo pedido com produtos' })
   async create(
-    @Body("pedidoId") pedidoId: number,
-    @Body("produtoId") produtoId: number,
     @Body() createPedidoItensDto: CreatePedidoItensDto,
   ) {
-    return this.pedidoItensService.create( pedidoId, produtoId, createPedidoItensDto);
+    return this.pedidoItensService.create(createPedidoItensDto);
   }
 
   @Get()
@@ -34,14 +32,20 @@ export class PedidoItensController {
     return this.pedidoItensService.findAll();
   }
 
-  @Get(":pedidoId, :produtoId")
+  @Get(":pedidoId")
+  @ApiOperation({ summary: 'Achar todos os itens de um mesmo pedido' })
+  async findByPedidoId(@Param("pedidoId") pedidoId: number){
+    return this.pedidoItensService.findByPedidoId(pedidoId);
+  }
+
+  @Get(":pedidoId/:produtoId")
   @ApiOperation({ summary: 'Achar um pedido com produto pelos Ids de pedido e produto' })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Lista de pedido com produtos nao encontrada.' })
   async findOne(@Param("pedidoId") pedidoId: number, @Param("produtoId") produtoId: number) {
     return this.pedidoItensService.findOne(pedidoId, produtoId);
   }
 
-  @Patch(":pedidoId, :produtoId")
+  @Patch(":pedidoId/:produtoId")
   @ApiOperation({ summary: 'Atualizar um pedido com produto pelos Ids de pedido e produto' })
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Lista de pedido com produtos nao encontrada.' })
   async update(
@@ -52,7 +56,7 @@ export class PedidoItensController {
     return this.pedidoItensService.update(pedidoId, produtoId, updatePedidoItensDto);
   }
 
-  @Delete(":pedidoId, :produtoId")
+  @Delete(":pedidoId/:produtoId")
   @ApiOperation({ summary: 'Atualizar um pedido com produto pelos Ids de pedido e produto' })
   @ApiResponse({ status: HttpStatus.NO_CONTENT })
   @HttpCode(HttpStatus.NO_CONTENT)

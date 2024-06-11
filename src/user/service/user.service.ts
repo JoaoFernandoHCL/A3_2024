@@ -34,9 +34,7 @@ export class UserService {
         const saltOrRounds = 10; // o custo do processamento, 10 é geralmente suficiente
         const hash = await bcrypt.hash(createUserDto.senha, saltOrRounds);
         createUserDto.senha = hash; // substitui a senha original pelo hash
-      return await this.userRepository.save(
-        this.userRepository.create(createUserDto),
-      );
+      return await this.userRepository.save(createUserDto);
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY') {
         throw new HttpException('Email já registrado.', HttpStatus.BAD_REQUEST);

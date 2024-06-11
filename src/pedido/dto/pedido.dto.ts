@@ -1,5 +1,5 @@
 import { PartialType } from "@nestjs/mapped-types";
-import { Length, IsInt, IsDecimal, IsString } from "class-validator";
+import { Length, IsInt, IsString, IsNumber } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 
@@ -9,7 +9,7 @@ export class CreatePedidoDto {
     @ApiProperty({ description: 'Data da compra do pedido' })
     data_compra: string;
 
-    @IsDecimal()
+    @IsNumber()
     @ApiProperty({ description: 'Preco total do pedido' })
     preco_total: number;
 

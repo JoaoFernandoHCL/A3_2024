@@ -1,4 +1,4 @@
-import { Column, Entity,ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { PedidoItens } from 'src/pedido-itens/entity/pedido-itens.entity';
 
 @Entity()
@@ -9,7 +9,7 @@ export class Produto {
   @Column({ unique: true, length: 40 })
   nome: string;
 
-  @Column({ unique: true, length: 10 })
+  @Column({ length: 10 })
   categoria: string;
 
   @Column({ type: 'decimal', precision: 5, scale: 2 })
@@ -18,7 +18,7 @@ export class Produto {
   @Column({ length: 4 })
   unidade_medida: string;
 
-  @ManyToMany(()=> PedidoItens, (pedidoItens) => pedidoItens.pedidos)
+  @OneToMany(()=> PedidoItens, (pedidoItens) => pedidoItens.produtos)
   pedidoItens: PedidoItens[];
 
 }
