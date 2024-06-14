@@ -1,0 +1,12 @@
+[
+    { "path": "/",        "label": "Home",     "component": "Home" },
+    { "path": "/sobre",   "label": "Sobre",    "component": "About" },
+    { "path": "/login",   "label": "Login",    "component": "Login" },
+    { "path": "/contato", "label": "Contato",  "component": "ContactPages" },
+    { "path": "/listaCompra", "label": "Cardapio",  "component": "ListaProdutos" },
+    { "path": "/pedidos", "label": "Pedidos",  "component": "PedidoUsuario" },
+    { "path": "/perfil", "label": "Perfil",  "component": "PerfilUsuario" },
+    { "path": "/pedidosAdmin", "label": "PedidosAdmin",  "component": "Pedidos" },
+    { "path": "/produtosAdmin", "label": "ProdutosAdmin",  "component": "Produtos" },
+    { "path": "/usuariosAdmin", "label": "UsuariosAdmin",  "component": "Usuarios" }
+  ]
