@@ -8,22 +8,26 @@ import {
     Param,
     Post,
     Put,
+    UseGuards,
   } from '@nestjs/common';
-  import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
-  import { UserService } from '../service/user.service';
-  import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-  
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
+import { UserService } from '../service/user.service';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard.strategy';
+ 
   @Controller('user')
   @ApiTags('user')
   export class UserController {
     constructor(private readonly userService: UserService) {}
-  
+    
+    @UseGuards(JwtAuthGuard)
     @Get()
     @ApiOperation({ summary: 'Achar todos os usuarios' })
     async findAll(): Promise<any[]> {
       return this.userService.findAll();
     }
-  
+    
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     @ApiOperation({ summary: 'Achar um usuario pelo Id' })
     @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Usuário não encontrado.' })
@@ -38,7 +42,8 @@ import {
     async create(@Body() createUserDto: CreateUserDto): Promise<any> {
       return this.userService.create(createUserDto);
     }
-  
+
+    @UseGuards(JwtAuthGuard)
     @Put(':id')
     @ApiOperation({ summary: 'Atualizar os dados de um usuario pelo Id' })
     @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Usuário não encontrado.' })
@@ -49,6 +54,7 @@ import {
       return this.userService.update(id, updateUserDto);
     }
   
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     @ApiOperation({ summary: 'Deletar um usuario pelo Id' })
     @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Usuário não encontrado.' })

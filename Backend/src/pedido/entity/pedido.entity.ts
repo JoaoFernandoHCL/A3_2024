@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from 'src/user/entity/user.entity'
 import { PedidoItens } from 'src/pedido-itens/entity/pedido-itens.entity';
 

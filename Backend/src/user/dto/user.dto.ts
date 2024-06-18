@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @IsString()
-  @Length(5, 40, { message: 'o tamanho minimo do nome é 5 caracteres' })
+  @Length(2, 40, { message: 'o tamanho minimo do nome é 5 caracteres' })
   @ApiProperty({ description: 'Nome do usuario' })
   nome: string;
 

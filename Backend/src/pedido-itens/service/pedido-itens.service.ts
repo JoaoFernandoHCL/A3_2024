@@ -33,7 +33,6 @@ export class PedidoItensService {
       id_produto: createPedidoItensDto.produto_id,
         ... createPedidoItensDto,
     });
-    console.log('Criando PedidoItens:', newPedidoItens);
     return await this.pedidoItensRepository.save(newPedidoItens);
 
   }

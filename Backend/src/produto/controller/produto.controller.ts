@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ProdutoService } from '../service/produto.service';
 import { CreateProdutoDto, UpdateProdutoDto  } from '../dto/produto.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard.strategy';
 
+
+@UseGuards(JwtAuthGuard)
 @Controller('produtos')
 @ApiTags('produtos')
 export class ProdutoController {

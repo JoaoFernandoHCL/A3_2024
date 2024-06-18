@@ -8,11 +8,14 @@ import {
     Delete,
     HttpCode,
     HttpStatus,
+    UseGuards,
   } from "@nestjs/common";
-  import { PedidoItensService } from "../service/pedido-itens.service";
-  import { CreatePedidoItensDto, UpdatePedidoItensDto } from "../dto/pedido-itens.dto";
-  import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { PedidoItensService } from "../service/pedido-itens.service";
+import { CreatePedidoItensDto, UpdatePedidoItensDto } from "../dto/pedido-itens.dto";
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from "src/auth/guard/jwt-auth.guard.strategy";
 
+@UseGuards(JwtAuthGuard)  
 @Controller('pedido-itens')
 @ApiTags('pedido-itens')
 export class PedidoItensController {
