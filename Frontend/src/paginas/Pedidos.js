@@ -48,6 +48,11 @@ function Pedidos() {
     } catch (error) {
       console.error("Error loading pedidos:", error);
       setError("Failed to load pedidos.");
+      if (error.response && error.response.status === 401) {
+        // Redireciona para a página de login se não estiver autenticado
+        window.location.href = "http://localhost:3000/login";
+        alert("Usuário não logado. Por favor faça o login para ter acesso ao serviço");
+      }
     }
   };
 

@@ -75,6 +75,11 @@ function PedidoUsuario() {
         setProdutosPedido(produtosCompletos);
       } catch (error) {
         console.error("Erro ao buscar pedido e produtos do pedido:", error);
+        if (error.response && error.response.status === 401) {
+          // Redireciona para a página de login se não estiver autenticado
+          window.location.href = "http://localhost:3000/login";
+          alert("Usuário não logado. Por favor faça o login para ter acesso ao serviço");
+        }
       }
     };
     

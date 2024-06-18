@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useState, useCallback } from "react";
 import {
   TextField,
   Button,
@@ -33,38 +32,9 @@ function ListaProdutos() {
   const [quantidades, setQuantidades] = useState({});
   const [alertMessage, setAlertMessage] = useState("");
   const [precoTotal, setPrecoTotal] = useState(0);
+  const userId = localStorage.getItem("userId");
 
-  useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      setAlertMessage("Você deve estar logado no sistema primeiro.");
-      return;
-    }
-
-    const pedidoId = localStorage.getItem("pedidoId");
-    if (!pedidoId) {
-      createPedidoCardapio(userId);
-    } else {
-      fetchProdutos();
-      fetchQuantidades(pedidoId);
-    }
-  }, [localStorage.getItem("userId")]);
-
-
-  useEffect(() => {
-    calculateTotalPrice();
-  }, [quantidades]);
-
-  const calculateTotalPrice = () => {
-    let total = 0;
-    produtos.forEach((produto) => {
-      const quantidade = quantidades[produto.id_produto] || 0;
-      total += quantidade * produto.preco;
-    });
-    setPrecoTotal(total.toFixed(2));
-  };
-
-  const createPedidoCardapio = async (userId) => {
+  const createPedidoCardapio = useCallback(async (userId) => {
     try {
       const payload = {
         data_compra: new Date().toLocaleDateString("pt-BR"),
@@ -78,7 +48,22 @@ function ListaProdutos() {
     } catch (error) {
       console.error("Erro ao criar pedido:", error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!userId) {
+      setAlertMessage("Você deve estar logado no sistema primeiro.");
+      return;
+    }
+
+    const pedidoId = localStorage.getItem("pedidoId");
+    if (!pedidoId) {
+      createPedidoCardapio(userId);
+    } else {
+      fetchProdutos();
+      fetchQuantidades(pedidoId);
+    }
+  }, [userId, createPedidoCardapio]);
 
   const fetchProdutos = async () => {
     try {
@@ -98,6 +83,10 @@ function ListaProdutos() {
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
+      if (error.response && error.response.status === 401) {
+        window.location.href = "http://localhost:3000/login";
+        alert("Usuário não logado. Por favor faça o login para ter acesso ao serviço");
+      }
     }
   };
 
@@ -114,7 +103,18 @@ function ListaProdutos() {
     }
   };
 
+  const calculateTotalPrice = useCallback(() => {
+    let total = 0;
+    produtos.forEach((produto) => {
+      const quantidade = quantidades[produto.id_produto] || 0;
+      total += quantidade * produto.preco;
+    });
+    setPrecoTotal(total.toFixed(2));
+  }, [produtos, quantidades]);
 
+  useEffect(() => {
+    calculateTotalPrice();
+  }, [calculateTotalPrice]);
 
   const handleAddUnit = (produtoId) => {
     setQuantidades((prevQuantidades) => ({
@@ -142,10 +142,8 @@ function ListaProdutos() {
             pedidoItem = await getPedidoItem(pedidoId, produto.id_produto);
           } catch (error) {
             if (error.response && error.response.status === 404) {
-              // Item não encontrado, deve ser criado
               pedidoItem = null;
             } else {
-              // Re-throw outros erros
               throw error;
             }
           }
@@ -177,9 +175,6 @@ function ListaProdutos() {
     }
   };
 
-
-
-
   const renderProdutos = () => {
     return produtos.map((produto) => (
       <ListItem key={produto.id_produto} divider>
@@ -204,7 +199,6 @@ function ListaProdutos() {
       </ListItem>
     ));
   };
-
 
   return (
     <div className="scrollable">
@@ -235,7 +229,6 @@ function ListaProdutos() {
             >
               Finalizar Compra
             </Button>
-
           </>
         ) : (
           !alertMessage && (
@@ -254,4 +247,5 @@ function ListaProdutos() {
     </div>
   );
 }
+
 export default ListaProdutos;

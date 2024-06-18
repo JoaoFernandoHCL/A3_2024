@@ -3,9 +3,24 @@ import { deletePedido, getPedidos } from "./crudServicePedidos";
 
 const API_URL = "http://localhost:3001"; // Ensure this is the correct URL of your backend server
 
+// Função para obter o token do localStorage
+const getToken = () => {
+  return localStorage.getItem("token");
+};
+
+// Função para configurar os headers com o token de autenticação
+const getConfig = () => {
+  const token = getToken();
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 export const getUsers = async () => {
   try {
-    const response = await axios.get(`${API_URL}/user`);
+    const response = await axios.get(`${API_URL}/user`, getConfig());
     return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -25,7 +40,7 @@ export const createUser = async (userData) => {
 
 export const updateUser = async (id, user) => {
   try {
-    const response = await axios.put(`${API_URL}/user/${id}`, user);
+    const response = await axios.put(`${API_URL}/user/${id}`, user, getConfig());
     return response.data;
   } catch (error) {
     console.error("Error updating user:", error);
@@ -54,7 +69,7 @@ export const deleteUser = async (id) => {
     }));
 
     // Agora que todos os pedidos relacionados foram deletados, podemos deletar o usuário em si
-    const response = await axios.delete(`${API_URL}/user/${id}`);
+    const response = await axios.delete(`${API_URL}/user/${id}`, getConfig());
     return response.data;
   } catch (error) {
     console.error("Error deleting user:", error);
@@ -81,7 +96,7 @@ export const getPedidosDoUsuario = async (userId) => {
 
 export const getUserById = async (id) => {
     try {
-      const response = await axios.get(`${API_URL}/user/${id}`);
+      const response = await axios.get(`${API_URL}/user/${id}`, getConfig());
       return response.data;
     } catch (error) {
       console.error("Error fetching user by ID:", error);

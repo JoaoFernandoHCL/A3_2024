@@ -3,9 +3,24 @@ import { getPedidoItensByPedidoId, deletePedidoItem } from "./crudServicePedidoI
 
 const API_URL = "http://localhost:3001"; // Certifique-se de que este é o URL correto do seu servidor backend
 
+// Função para obter o token do localStorage
+const getToken = () => {
+  return localStorage.getItem("token");
+};
+
+// Função para configurar os headers com o token de autenticação
+const getConfig = () => {
+  const token = getToken();
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 export const getPedidos = async () => {
   try {
-    const response = await axios.get(`${API_URL}/pedidos`);
+    const response = await axios.get(`${API_URL}/pedidos`, getConfig());
     // Extrai os pedidos da resposta
     const pedidos = response.data.flatMap(user => 
       user.pedidos.map(pedido => ({
@@ -23,7 +38,7 @@ export const getPedidos = async () => {
 
 export const createPedido = async (pedidoData) => {
   try {
-    const response = await axios.post(`${API_URL}/pedidos`, pedidoData);
+    const response = await axios.post(`${API_URL}/pedidos`, pedidoData, getConfig());
     return response.data;
   } catch (error) {
     console.error("Error creating pedido:", error);
@@ -33,7 +48,7 @@ export const createPedido = async (pedidoData) => {
 
 export const updatePedido = async (id, pedidoData) => {
   try {
-    const response = await axios.put(`${API_URL}/pedidos/${id}`, pedidoData);
+    const response = await axios.put(`${API_URL}/pedidos/${id}`, pedidoData, getConfig());
     return response.data;
   } catch (error) {
     console.error("Error updating pedido:", error);
@@ -62,7 +77,7 @@ export const deletePedido = async (id) => {
     }));
 
     // Agora que todos os itens de pedido relacionados foram deletados, podemos deletar o pedido em si
-    const response = await axios.delete(`${API_URL}/pedidos/${id}`);
+    const response = await axios.delete(`${API_URL}/pedidos/${id}`, getConfig());
     localStorage.removeItem("pedidoId");
     return response.data;
   } catch (error) {
@@ -74,7 +89,7 @@ export const deletePedido = async (id) => {
 
 export const getPedidoById = async (id) => {
     try {
-      const response = await axios.get(`${API_URL}/pedidos/${id}`);
+      const response = await axios.get(`${API_URL}/pedidos/${id}`, getConfig());
       return response.data;
     } catch (error) {
       console.error("Error fetching pedido:", error);
